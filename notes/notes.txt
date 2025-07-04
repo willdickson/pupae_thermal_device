@@ -1,0 +1,30 @@
+
+Peltier
+Laird Thermal Systems, Inc.
+Manufacture PN 387005513
+https://lairdthermal.com/products/thermoelectric-cooler-modules/peltier-thermal-cycling-pcx-series/387005513
+
+Digikey PN 1487-387005513-ND
+https://www.digikey.com/en/products/detail/laird-thermal-systems-inc/387005513/15912562?s=N4IgjCBcoCwGxVAYygMwIYBsDOBTANCAPZQDaIcA7GDTCALqEAOALlCAMosBOAlgHYBzEAF8RhAExkQTXJha9c3AAQMRQA
+
+Heatsinks
+https://www.digikey.com/en/products/detail/fischer-elektronik/SK-521-75-SA/25827986
+https://www.digikey.com/en/products/detail/fischer-elektronik/SK-693-75-ME/25828168
+
+Adafruit
+DC Motor + Stepper FeatherWing Add-on For All Feather Boards
+https://www.adafruit.com/product/2927
+
+Adafruit
+Adafruit MLX90640 IR Thermal Camera Breakout - 55 Degree
+https://www.adafruit.com/product/4407
+
+Sparkfun
+SparkFun Micro Temperature Sensor - STTS22H
+https://www.sparkfun.com/sparkfun-micro-temperature-sensor-stts22h-qwiic.html
+
+
+
+
+
+

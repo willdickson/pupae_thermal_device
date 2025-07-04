@@ -1,0 +1,13 @@
+*~
+*.pyc
+*-bak
+*.FCBak
+*.swp
+*-backups
+firmware/libraries/CircularBuffer
+firmware/libraries/ArduinoJson
+firmware/libraries/Streaming
+firmware/libraries/Adafruit_MCP4725
+firmware/libraries/Adafruit_BusIO  
+firmware/flybratron/build
+software/rust/flybratron_ws/target
