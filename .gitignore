@@ -9,5 +9,6 @@ firmware/libraries/ArduinoJson
 firmware/libraries/Streaming
 firmware/libraries/Adafruit_MCP4725
 firmware/libraries/Adafruit_BusIO  
+firmware/libraries/SparkFun_Temperature_Sensor_-_STTS22H
 firmware/flybratron/build
 software/rust/flybratron_ws/target
