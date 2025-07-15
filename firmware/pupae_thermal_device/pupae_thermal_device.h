@@ -4,7 +4,9 @@
 #include <Streaming.h>
 #include "SparkFun_STTS22H.h"
 #include "Adafruit_MotorShield.h"
+
 #include "constants.h"
+#include "temperature_controller.h"
 
 class PupaeThermalDevice {
 
@@ -16,6 +18,7 @@ class PupaeThermalDevice {
 
     protected:
 
+        TemperatureController temperature_controller_[NUM_CONTROLLER];
         Adafruit_MotorShield motor_shield_ = Adafruit_MotorShield();
 
 };

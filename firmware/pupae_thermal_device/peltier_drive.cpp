@@ -1,5 +1,6 @@
-#include <cmath>
 #include "peltier_drive.h"
+#include <cmath>
+#include <Streaming.h>
 
 PeltierDrive::PeltierDrive() { }
 
@@ -13,10 +14,14 @@ float PeltierDrive::power() {
 }
 
 void PeltierDrive::set_power(float value) {
+    uint16_t speed = uint16_t(0.01*MAX_MOTOR_SPEED*fabs(value)); 
+    //Serial << "speed: " << speed << endl;
+    motor_ -> setSpeedFine(speed);
+    if (power_ < 0) {
+        motor_ -> run(FORWARD);   // Cooling 
+    }
+    else {
+        motor_ -> run(BACKWARD);  // Heating
+    }
     power_ = value;
-    uint8_t power_int = uint8_t(constrain(255*uint32_t(fabs(power_)),0,255));
-    uint
-    if (power_ > 0) {
-
-
 }

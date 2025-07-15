@@ -1,4 +1,5 @@
 #include "pupae_thermal_device.h"
+#include <Streaming.h>
 
 PupaeThermalDevice::PupaeThermalDevice() {}
 
@@ -6,7 +7,30 @@ void PupaeThermalDevice::initialize() {
     Wire.begin();
     Serial.begin(SERIAL_BAUDRATE);
     motor_shield_.begin();
+
+    for (uint8_t i=0; i<NUM_CONTROLLER; i++) {
+        Adafruit_DCMotor *motor = motor_shield_.getMotor(DRIVE_MOTOR_NUMBER[i]);
+        temperature_controller_[i].initialize(SENSOR_ADDRESS[i], motor);
+    }
+
+    temperature_controller_[0].set_setpoint(22.0);
+    temperature_controller_[1].set_setpoint(22.0);
+
+    for (uint8_t i=0; i<NUM_CONTROLLER; i++) {
+        temperature_controller_[i].set_enabled(true);
+        temperature_controller_[i].set_gain(50.0);
+    }
+
 }
 
 void PupaeThermalDevice::update() {
+
+    for (uint8_t i=0; i<NUM_CONTROLLER; i++) {
+        temperature_controller_[i].update();
+        float temp = temperature_controller_[i].temperature();
+        float setp = temperature_controller_[i].setpoint();
+        Serial << i << ", temp: " << temp << ", setp: " << setp << endl; 
+    }
+    Serial << endl;
+    delay(LOOP_DT);
 }

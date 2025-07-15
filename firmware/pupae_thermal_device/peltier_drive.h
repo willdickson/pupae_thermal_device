@@ -4,17 +4,19 @@
 
 class PeltierDrive {
 
+
     public:
         PeltierDrive();
         void initialize(Adafruit_DCMotor *motor);
 
         float power();
-        void set_power(float value);
+        void set_power(float power);
+
+        const static uint16_t MAX_MOTOR_SPEED = (2<<11)-1;
 
     protected:
-        uint8_t drive_number_ = 0;
-        float power_ = 0.0;
         Adafruit_DCMotor *motor_ = nullptr; 
+        float power_ = 0.0;
 
 };
 
