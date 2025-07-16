@@ -17,6 +17,9 @@ class TemperatureController {
         void update(float ambient);
 
         float temperature();
+        float power();
+        float error();
+        float ierror();
 
         uint8_t sensor_address();
 
@@ -26,33 +29,34 @@ class TemperatureController {
         float setpoint();
         void set_setpoint(float value); 
 
-        float gain();
-        void set_gain(float value);
+        float pgain();
+        void set_pgain(float value);
 
-        float ff_slope();
-        void set_ff_slope(float value);
+        float igain();
+        void set_igain(float value);
 
         float ambient();
         void set_ambient(float value);
 
         static constexpr uint32_t SENSOR_SETUP_DT = 100;
         static constexpr float DEFAULT_SETPOINT = 22.0;
-        static constexpr float DEFAULT_GAIN = 1.0;
-        static constexpr float DEFAULT_FF_SLOPE = 0.0;
+        static constexpr float DEFAULT_PGAIN = 1.0;
+        static constexpr float DEFAULT_IGAIN = 0.0;
         static constexpr float DEFAULT_AMBIENT = 22.0;
-
 
     protected:
         SparkFun_STTS22H sensor_;
         PeltierDrive peltier_drive_ = PeltierDrive();
-
         bool enabled_ = false;
         uint8_t sensor_address_ = 0;
         float setpoint_ = DEFAULT_SETPOINT;
-        float gain_ = DEFAULT_GAIN;
-        float ff_slope_ = DEFAULT_FF_SLOPE;
+        float pgain_ = DEFAULT_PGAIN;
+        float igain_ = DEFAULT_IGAIN;
         float ambient_ = DEFAULT_AMBIENT;
         float temperature_ = DEFAULT_AMBIENT;
+        float error_ = 0.0;
+        float ierror_ = 0.0;
+        float power_ = 0.0;
 
 };
 

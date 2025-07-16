@@ -5,7 +5,6 @@ TemperatureController::TemperatureController() {}
 
 
 void TemperatureController::initialize(uint8_t sensor_address, Adafruit_DCMotor *motor) {
-    Serial << "setting up temperature sensor" << endl;
     sensor_address_ = sensor_address;
     while (!sensor_.begin(sensor_address_)) { 
         Serial << "  temperature sensor failed to begin" << endl; 
@@ -16,7 +15,6 @@ void TemperatureController::initialize(uint8_t sensor_address, Adafruit_DCMotor 
     sensor_.setDataRate(STTS22H_25Hz);
     sensor_.enableAutoIncrement();
     delay(SENSOR_SETUP_DT);
-    Serial << "temperature sensor ready" << endl;
 
     peltier_drive_.initialize(motor);
 }
@@ -25,11 +23,11 @@ void TemperatureController::initialize(uint8_t sensor_address, Adafruit_DCMotor 
 void TemperatureController::update() {
     if (enabled_) {
         sensor_.getTemperatureC(&temperature_);
-        float error = setpoint_ - temperature_;
-        float delta = setpoint_ - ambient_;
-        float power = gain_*error + ff_slope_*delta;
-        //Serial << "power: " << power << endl;
-        peltier_drive_.set_power(power);
+        error_ = setpoint_ - temperature_;
+        ierror_ = ierror_ + error_;
+        ierror_ = constrain(ierror_, -1.0*DRIVE_MAX_POWER/igain_, 1.0*DRIVE_MAX_POWER/igain_);
+        power_ = pgain_*error_ + igain_*ierror_;
+        peltier_drive_.set_power(power_);
     }
     else {
         peltier_drive_.set_power(0.0);
@@ -48,6 +46,21 @@ float TemperatureController::temperature() {
 }
 
 
+float TemperatureController::power() {
+    return power_;
+}
+
+
+float TemperatureController::error() {
+    return error_;
+}
+
+
+float TemperatureController::ierror() {
+    return ierror_;
+}
+
+
 uint8_t TemperatureController::sensor_address() {
     return sensor_address_;
 }
@@ -62,6 +75,7 @@ void TemperatureController::set_enabled(bool value) {
     enabled_ = value;
     if (!enabled_) {
         peltier_drive_.set_power(0.0);
+        ierror_ = 0.0;
     }
 }
 
@@ -76,23 +90,23 @@ void TemperatureController::set_setpoint(float value) {
 }
 
 
-float TemperatureController::gain() {
-    return gain_;
+float TemperatureController::pgain() {
+    return pgain_;
 }
 
 
-void TemperatureController::set_gain(float value) {
-    gain_ = value;
+void TemperatureController::set_pgain(float value) {
+    pgain_ = fabs(value);
 }
 
 
-float TemperatureController::ff_slope() {
-    return ff_slope_;
+float TemperatureController::igain() {
+    return igain_;
 }
 
 
-void TemperatureController::set_ff_slope(float value) {
-    ff_slope_ = value;
+void TemperatureController::set_igain(float value) {
+    igain_ = fabs(value);
 }
 
 

@@ -18,18 +18,28 @@ void PupaeThermalDevice::initialize() {
 
     for (uint8_t i=0; i<NUM_CONTROLLER; i++) {
         temperature_controller_[i].set_enabled(true);
-        temperature_controller_[i].set_gain(50.0);
+        temperature_controller_[i].set_pgain(100.0);
+        temperature_controller_[i].set_igain(0.005);
     }
 
 }
 
 void PupaeThermalDevice::update() {
 
-    for (uint8_t i=0; i<NUM_CONTROLLER; i++) {
+    for (uint8_t i=0; i<NUM_CONTROLLER; i++) { 
         temperature_controller_[i].update();
         float temp = temperature_controller_[i].temperature();
         float setp = temperature_controller_[i].setpoint();
-        Serial << i << ", temp: " << temp << ", setp: " << setp << endl; 
+        float err  = temperature_controller_[i].error();
+        float ierr = temperature_controller_[i].ierror();
+        float power = temperature_controller_[i].power();
+        Serial << i;  
+        Serial << ", temp: " << temp; 
+        Serial << ", setp: " << setp; 
+        Serial << ", err: "  << err; 
+        Serial << ", ierr: " << ierr; 
+        Serial << ", power: " << power; 
+        Serial << endl; 
     }
     Serial << endl;
     delay(LOOP_DT);
