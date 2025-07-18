@@ -21,8 +21,8 @@ void TemperatureController::initialize(uint8_t sensor_address, Adafruit_DCMotor 
 
 
 void TemperatureController::update() {
+    sensor_.getTemperatureC(&temperature_);
     if (enabled_) {
-        sensor_.getTemperatureC(&temperature_);
         error_ = setpoint_ - temperature_;
         ierror_ = ierror_ + error_;
         ierror_ = constrain(ierror_, -1.0*DRIVE_MAX_POWER/igain_, 1.0*DRIVE_MAX_POWER/igain_);
