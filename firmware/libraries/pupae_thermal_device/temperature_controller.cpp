@@ -35,12 +35,6 @@ void TemperatureController::update() {
 }
 
 
-void TemperatureController::update(float ambient) {
-    set_ambient(ambient);
-    update();
-}
-
-
 float TemperatureController::temperature() {
     return temperature_;
 }
@@ -107,15 +101,5 @@ float TemperatureController::igain() {
 
 void TemperatureController::set_igain(float value) {
     igain_ = fabs(value);
-}
-
-
-float TemperatureController::ambient() {
-    return ambient_;
-}
-
-
-void TemperatureController::set_ambient(float value) {
-    ambient_ = value;
 }
 
