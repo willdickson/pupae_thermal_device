@@ -31,4 +31,7 @@ const float DEFAULT_IGAIN = 0.005;
 
 const float DEFAULT_SETP[NUM_CONTROLLER] = {18.0, 32.0};
 
+const float MIN_SETP_TEMP_C = 16.0;
+const float MAX_SETP_TEMP_C = 34.0;
+
 

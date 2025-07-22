@@ -3,6 +3,7 @@
 #include <Arduino.h>
 
 constexpr uint32_t NUM_CONTROLLER = 2;
+constexpr size_t MESSAGE_RECEIVER_SIZE = 2000;
 
 extern const uint32_t LOOP_DT;
 extern const uint32_t SERIAL_BAUDRATE;
@@ -31,8 +32,9 @@ extern const unsigned long BUTTON_MIN_STEP_DT_MS;
 
 extern const float DEFAULT_PGAIN;
 extern const float DEFAULT_IGAIN;
-
 extern const float DEFAULT_SETP[NUM_CONTROLLER];
 
+extern const float MIN_SETP_TEMP_C;
+extern const float MAX_SETP_TEMP_C;
 
 #endif

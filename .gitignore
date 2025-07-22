@@ -18,3 +18,4 @@ firmware/libraries/Adafruit_TSC2007
 firmware/libraries/Servo
 firmware/libraries/SparkFun_Temperature_Sensor_-_STTS22H
 firmware/libraries/Switch
+firmware/libraries/CircularBuffer

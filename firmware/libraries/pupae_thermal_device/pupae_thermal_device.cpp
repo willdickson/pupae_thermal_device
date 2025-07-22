@@ -44,27 +44,22 @@ void PupaeThermalDevice::update_controllers() {
     }
 }
 
+
 void PupaeThermalDevice::handle_button_input() {
 
-    // Note:  maybe loop here. Also need to set temperature limits.
-    // -----------------------------------------------------------------
-    r_setp_button_.poll();
-    if (r_setp_button_.step_indicated()) {
-        float step = r_setp_button_.step();
-        float old_setpoint = temperature_controller_[0].setpoint();
-        float new_setpoint = old_setpoint + step; 
-        temperature_controller_[0].set_setpoint(new_setpoint);
+    // Check for setpoint update
+    for (uint8_t i=0; i<NUM_CONTROLLER; i++) {
+        setpoint_button_[i].poll();
+        if (setpoint_button_[i].step_indicated()) {
+            float step = setpoint_button_[i].step();
+            float old_setpoint = temperature_controller_[i].setpoint();
+            float new_setpoint = old_setpoint + step; 
+            new_setpoint = constrain(new_setpoint, MIN_SETP_TEMP_C, MAX_SETP_TEMP_C);
+            temperature_controller_[i].set_setpoint(new_setpoint);
+        }
     }
 
-    l_setp_button_.poll();
-    if (l_setp_button_.step_indicated()) {
-        float step = l_setp_button_.step();
-        float old_setpoint = temperature_controller_[1].setpoint();
-        float new_setpoint = old_setpoint + step; 
-        temperature_controller_[1].set_setpoint(new_setpoint);
-    }
-    // -----------------------------------------------------------------
-
+    // Check for change in enable/disable
     enable_button_.poll();
     if (enable_button_.pushed()) {
         enabled_ = !enabled_;
