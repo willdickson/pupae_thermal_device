@@ -37,4 +37,10 @@ extern const float DEFAULT_SETP[NUM_CONTROLLER];
 extern const float MIN_SETP_TEMP_C;
 extern const float MAX_SETP_TEMP_C;
 
+extern const String MSG_KEY_COMMAND;
+extern const String MSG_KEY_ERROR; 
+extern const String MSG_COMMAND_GET; 
+extern const String MSG_COMMAND_SET; 
+extern const String RSP_UNKNOWN_COMMAND;
+
 #endif

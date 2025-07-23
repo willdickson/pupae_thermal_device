@@ -24,9 +24,11 @@ void PupaeThermalDevice::initialize() {
 }
 
 void PupaeThermalDevice::update() {
+    handle_message();
     handle_button_input();
     update_timed_services();
 }
+
 
 void PupaeThermalDevice::update_timed_services() {
     unsigned long now = millis();
@@ -90,4 +92,42 @@ void PupaeThermalDevice::update_display() {
         display_.printf("  DISABLED");                  
     }
     display_.display();
+}
+
+
+void PupaeThermalDevice::handle_message() {
+    msg_handler_.update();
+    if (msg_handler_.new_message()) {
+        JsonDocument &msg_doc = msg_handler_.get_message_doc();
+        const char* command_char = msg_doc[MSG_KEY_COMMAND];
+        if (!command_char) {
+            JsonDocument &rsp_doc = msg_handler_.get_message_doc();
+            rsp_doc[MSG_KEY_ERROR] = String("command is missing or incorrect");
+            msg_handler_.send_response();
+            return;
+        }
+        String command = String(command_char);
+        if (command == MSG_COMMAND_GET) {
+            on_get_command();
+        }
+        if (command == MSG_COMMAND_SET) {
+            on_set_command();
+        }
+    }
+}
+
+
+void PupaeThermalDevice::on_set_command() {
+    JsonDocument &msg_doc = msg_handler_.get_message_doc();
+    JsonDocument &rsp_doc = msg_handler_.get_message_doc();
+    rsp_doc[MSG_KEY_COMMAND] = MSG_COMMAND_GET; 
+    msg_handler_.send_response();
+}
+
+
+void PupaeThermalDevice::on_get_command() {
+    JsonDocument &msg_doc = msg_handler_.get_message_doc();
+    JsonDocument &rsp_doc = msg_handler_.get_message_doc();
+    rsp_doc[MSG_KEY_COMMAND] = MSG_COMMAND_SET; 
+    msg_handler_.send_response();
 }
