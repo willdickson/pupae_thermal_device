@@ -13,9 +13,9 @@ void MessageHandler::update() {
     have_new_message_ = false;
     receiver_.read_data();
     if (receiver_.available()) {
-        msg_json_.clear();
-        rsp_json_.clear();
-        DeserializationError error = deserializeJson(msg_json_, receiver_.next());
+        msg_doc_.clear();
+        rsp_doc_.clear();
+        DeserializationError error = deserializeJson(msg_doc_, receiver_.next());
         if (error) {
             on_json_error(error);
         }
@@ -32,26 +32,26 @@ bool MessageHandler::new_message() {
 
 void MessageHandler::clear() {
     have_new_message_ = false;
-    msg_json_.clear();
-    rsp_json_.clear();
+    msg_doc_.clear();
+    rsp_doc_.clear();
 }
 
-JsonDocument& MessageHandler::get_message_doc() {
-    return msg_json_;
+const JsonDocument& MessageHandler::get_message_doc() const {
+    return msg_doc_;
 }
 
 JsonDocument& MessageHandler::get_response_doc() {
-    return rsp_json_;
+    return rsp_doc_;
 }
 
 void MessageHandler::send_response() {
-    serializeJson(rsp_json_, Serial);
+    serializeJson(rsp_doc_, Serial);
     Serial << endl;
 }
 
 
 void MessageHandler::on_json_error(DeserializationError &error) {
-    rsp_json_[MSG_KEY_ERROR] = error.c_str();
+    rsp_doc_[MSG_ERROR] = error.c_str();
     send_response();
 }
 

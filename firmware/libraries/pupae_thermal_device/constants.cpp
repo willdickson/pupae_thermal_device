@@ -34,10 +34,18 @@ const float DEFAULT_SETP[NUM_CONTROLLER] = {18.0, 32.0};
 const float MIN_SETP_TEMP_C = 16.0;
 const float MAX_SETP_TEMP_C = 34.0;
 
-const String MSG_KEY_COMMAND = String("command");
-const String MSG_KEY_ERROR = String("error");
-const String MSG_COMMAND_GET = String("get");
-const String MSG_COMMAND_SET = String("set");
+const String MSG_COMMAND = String("command");
+const String MSG_ERROR = String("error");
+const String MSG_VALUE = String("value");
+const String MSG_GET = String("get");
+const String MSG_SET = String("set");
+const String MSG_TEMPERATURE = String("temperature");
+const String MSG_CTRL_ERROR = String("ctrl_error");
+const String MSG_CTRL_IERROR = String("ctrl_ierror");
+const String MSG_PGAIN = String("pgain");
+const String MSG_IGAIN = String("igain");
+const String MSG_SETPOINT = String("setpoint");
 const String RSP_UNKNOWN_COMMAND = String("unknown command");
+
 
 

@@ -1,0 +1,16 @@
+[project]
+name = "pupae-thermal-device"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Will Dickson", email = "wbd@caltech.edu" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "pyserial>=3.5",
+]
+
+[build-system]
+requires = ["uv_build>=0.8.2,<0.9.0"]
+build-backend = "uv_build"

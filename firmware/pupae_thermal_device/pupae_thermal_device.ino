@@ -7,12 +7,9 @@
 PupaeThermalDevice device = PupaeThermalDevice();
 
 void setup() {
-    device.initialize();
+  device.initialize();
 }
 
 void loop() {
-    device.update();
+  device.update();
 }
-
-
-

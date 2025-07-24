@@ -36,12 +36,19 @@ class PupaeThermalDevice {
         unsigned long t_last_update_= 0;
 
         void handle_button_input();
-        void handle_message();
-        void on_get_command();
-        void on_set_command();
         void update_timed_services();
         void update_controllers();
         void update_display();
+
+        void handle_message();
+        void on_get_message();
+        void on_set_message();
+        void on_get_temperature();
+        void on_get_ctlr_error();
+        void on_get_ctrl_ierror();
+        void on_get_pgain();
+        void on_get_igain();
+        void on_get_setpoint();
 
 };
 

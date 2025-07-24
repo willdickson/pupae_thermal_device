@@ -98,36 +98,85 @@ void PupaeThermalDevice::update_display() {
 void PupaeThermalDevice::handle_message() {
     msg_handler_.update();
     if (msg_handler_.new_message()) {
-        JsonDocument &msg_doc = msg_handler_.get_message_doc();
-        const char* command_char = msg_doc[MSG_KEY_COMMAND];
+        const JsonDocument &msg_doc = msg_handler_.get_message_doc();
+        const char* command_char = msg_doc[MSG_COMMAND];
         if (!command_char) {
-            JsonDocument &rsp_doc = msg_handler_.get_message_doc();
-            rsp_doc[MSG_KEY_ERROR] = String("command is missing or incorrect");
+            JsonDocument &rsp_doc = msg_handler_.get_response_doc();
+            rsp_doc[MSG_ERROR] = String("command is missing or incorrect");
             msg_handler_.send_response();
             return;
         }
         String command = String(command_char);
-        if (command == MSG_COMMAND_GET) {
-            on_get_command();
+        if (command == MSG_GET) {
+            on_get_message();
         }
-        if (command == MSG_COMMAND_SET) {
-            on_set_command();
+        if (command == MSG_SET) {
+            on_set_message();
         }
     }
 }
 
 
-void PupaeThermalDevice::on_set_command() {
-    JsonDocument &msg_doc = msg_handler_.get_message_doc();
-    JsonDocument &rsp_doc = msg_handler_.get_message_doc();
-    rsp_doc[MSG_KEY_COMMAND] = MSG_COMMAND_GET; 
+void PupaeThermalDevice::on_set_message() {
+    const JsonDocument &msg_doc = msg_handler_.get_message_doc();
+    JsonDocument &rsp_doc = msg_handler_.get_response_doc();
+    rsp_doc[MSG_COMMAND] = MSG_SET; 
     msg_handler_.send_response();
 }
 
 
-void PupaeThermalDevice::on_get_command() {
-    JsonDocument &msg_doc = msg_handler_.get_message_doc();
-    JsonDocument &rsp_doc = msg_handler_.get_message_doc();
-    rsp_doc[MSG_KEY_COMMAND] = MSG_COMMAND_SET; 
+void PupaeThermalDevice::on_get_message() {
+    const JsonDocument &msg_doc = msg_handler_.get_message_doc();
+    JsonDocument &rsp_doc = msg_handler_.get_response_doc();
+
+    const char* value_char = msg_doc[MSG_VALUE];
+    if (!value_char) {
+        rsp_doc[MSG_ERROR] = String("get command missing value key");
+        msg_handler_.send_response();
+        return;
+    }
+
+    String value = String(value_char);
+    rsp_doc[MSG_COMMAND] = MSG_GET; 
+
+    if (value == MSG_TEMPERATURE) {
+        on_get_temperature();
+    }
+    else if (value == MSG_PGAIN) {
+        on_get_pgain();
+    }
     msg_handler_.send_response();
+}
+
+void PupaeThermalDevice::on_get_temperature() { 
+    JsonDocument &rsp_doc = msg_handler_.get_response_doc();
+    JsonArray temp_values = rsp_doc[MSG_TEMPERATURE].to<JsonArray>();
+    for (uint8_t i=0; i<NUM_CONTROLLER; i++) {
+        temp_values.add(temperature_controller_[i].temperature());
+    }
+}
+
+
+void PupaeThermalDevice::on_get_ctlr_error() {
+    JsonDocument &rsp_doc = msg_handler_.get_response_doc();
+}
+
+
+void PupaeThermalDevice::on_get_ctrl_ierror() {
+    JsonDocument &rsp_doc = msg_handler_.get_response_doc();
+}
+
+
+void PupaeThermalDevice::on_get_pgain() {
+    JsonDocument &rsp_doc = msg_handler_.get_response_doc();
+    JsonArray pgain_values = rsp_doc[MSG_PGAIN].to<JsonArray>();
+}
+
+
+void PupaeThermalDevice::on_get_igain() {
+    JsonDocument &rsp_doc = msg_handler_.get_response_doc();
+}
+
+
+void PupaeThermalDevice::on_get_setpoint() {
 }
