@@ -43,11 +43,14 @@ extern const String MSG_VALUE;
 extern const String MSG_GET; 
 extern const String MSG_SET; 
 extern const String MSG_TEMPERATURE;
+extern const String MSG_CTRL_POWER;
 extern const String MSG_CTRL_ERROR;
 extern const String MSG_CTRL_IERROR;
-extern const String MSG_PGAIN;
-extern const String MSG_IGAIN;
-extern const String MSG_SETPOINT;
+extern const String MSG_CTRL_PGAIN;
+extern const String MSG_CTRL_IGAIN;
+extern const String MSG_CTRL_SETPOINT;
+extern const String MSG_CTRL_ENABLED;
+extern const String MSG_ALL;
 extern const String RSP_UNKNOWN_COMMAND;
 
 #endif

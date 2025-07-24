@@ -40,11 +40,14 @@ const String MSG_VALUE = String("value");
 const String MSG_GET = String("get");
 const String MSG_SET = String("set");
 const String MSG_TEMPERATURE = String("temperature");
+const String MSG_CTRL_POWER = String("ctrl_power");
 const String MSG_CTRL_ERROR = String("ctrl_error");
 const String MSG_CTRL_IERROR = String("ctrl_ierror");
-const String MSG_PGAIN = String("pgain");
-const String MSG_IGAIN = String("igain");
-const String MSG_SETPOINT = String("setpoint");
+const String MSG_CTRL_PGAIN = String("ctrl_pgain");
+const String MSG_CTRL_IGAIN = String("ctrl_igain");
+const String MSG_CTRL_SETPOINT = String("ctrl_setpoint");
+const String MSG_CTRL_ENABLED = String("ctrl_enabled");
+const String MSG_ALL = String("all");
 const String RSP_UNKNOWN_COMMAND = String("unknown command");
 
 
