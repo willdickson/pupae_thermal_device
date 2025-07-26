@@ -71,6 +71,10 @@ class PupaeThermalDevice(Serial): # type: ignore
         del rsp_dict[MSG_COMMAND]
         return rsp_dict
 
+    def set_ctrl_enabled(self, enabled: bool):
+        cmd_dict = {MSG_COMMAND: MSG_SET, MSG_CTRL_ENABLED: enabled}
+        rsp_dict = self.send_cmd(cmd_dict)
+
     def send_cmd(self, cmd_dict: dict) -> dict:
         cmd_json = f'{json.dumps(cmd_dict)}\n'
         self.write(cmd_json.encode())

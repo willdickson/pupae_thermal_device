@@ -1,3 +1,4 @@
+import time
 from pupae_thermal_device import PupaeThermalDevice
 
 port = '/dev/ttyACM0'
@@ -26,4 +27,12 @@ print()
 value_dict = dev.get_all()
 for k,v in value_dict.items():
     print(f'{k}: {v}')
+print()
+
+
+print('enabling')
+dev.set_ctrl_enabled(True)
+time.sleep(5.0)
+print('disabling')
+dev.set_ctrl_enabled(False)
 

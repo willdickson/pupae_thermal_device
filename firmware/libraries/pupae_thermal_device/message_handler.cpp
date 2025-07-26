@@ -20,6 +20,7 @@ void MessageHandler::update() {
             on_json_error(error);
         }
         else {
+            msg_obj_ = msg_doc_.as<JsonObject>();
             have_new_message_ = true;
         }
     }
@@ -34,6 +35,11 @@ void MessageHandler::clear() {
     have_new_message_ = false;
     msg_doc_.clear();
     rsp_doc_.clear();
+    msg_obj_.clear();
+}
+
+const JsonObject& MessageHandler::get_message_obj() const {
+    return msg_obj_;
 }
 
 const JsonDocument& MessageHandler::get_message_doc() const {

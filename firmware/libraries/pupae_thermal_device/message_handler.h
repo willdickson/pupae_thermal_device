@@ -15,11 +15,13 @@ class MessageHandler {
         void clear();
         const JsonDocument& get_message_doc() const;
         JsonDocument& get_response_doc();
+        const JsonObject& get_message_obj() const;
 
     protected: 
         MessageReceiver<MESSAGE_RECEIVER_SIZE> receiver_;
         JsonDocument msg_doc_;
         JsonDocument rsp_doc_;
+        JsonObject msg_obj_;
         bool have_new_message_ = false;
         void on_json_error(DeserializationError &error);
 

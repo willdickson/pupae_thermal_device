@@ -21,7 +21,7 @@ void PupaeThermalDevice::initialize() {
     display_.setTextSize(1);
     display_.setTextColor(SH110X_WHITE);
 
-    // Set up get function table for message handling
+    // Populate get function table for message handling
     get_func_table_[MSG_TEMPERATURE]   = [this]() {this -> on_get_temperature();};
     get_func_table_[MSG_CTRL_POWER]    = [this]() {this -> on_get_ctrl_power();};
     get_func_table_[MSG_CTRL_ERROR]    = [this]() {this -> on_get_ctrl_error();};
@@ -32,12 +32,31 @@ void PupaeThermalDevice::initialize() {
     get_func_table_[MSG_CTRL_ENABLED]  = [this]() {this -> on_get_ctrl_enabled();};
     get_func_table_[MSG_ALL]           = [this]() {this -> on_get_all();};
 
+    // Populate set function table for message handling
+    set_func_table_[MSG_CTRL_PGAIN]    = [this]() {this -> on_set_ctrl_pgain();};
+    set_func_table_[MSG_CTRL_IGAIN]    = [this]() {this -> on_set_ctrl_igain();};
+    set_func_table_[MSG_CTRL_SETPOINT] = [this]() {this -> on_set_ctrl_setpoint();};
+    set_func_table_[MSG_CTRL_ENABLED]  = [this]() {this -> on_set_ctrl_enabled();};
+
 }
 
 void PupaeThermalDevice::update() {
     handle_message();
     handle_button_input();
     update_timed_services();
+}
+
+
+bool PupaeThermalDevice::enabled() {
+    return enabled_;
+}
+
+
+void PupaeThermalDevice::set_enabled(bool enabled) {
+    enabled_ = enabled;
+    for (uint8_t i=0; i<NUM_CONTROLLER; i++) {
+        temperature_controller_[i].set_enabled(enabled_);
+    }
 }
 
 
@@ -76,9 +95,7 @@ void PupaeThermalDevice::handle_button_input() {
     enable_button_.poll();
     if (enable_button_.pushed()) {
         enabled_ = !enabled_;
-        for (uint8_t i=0; i<NUM_CONTROLLER; i++) {
-            temperature_controller_[i].set_enabled(enabled_);
-        }
+        set_enabled(enabled_);
     }
 }
 
@@ -129,9 +146,15 @@ void PupaeThermalDevice::handle_message() {
 
 
 void PupaeThermalDevice::on_set_message() {
-    const JsonDocument &msg_doc = msg_handler_.get_message_doc();
     JsonDocument &rsp_doc = msg_handler_.get_response_doc();
     rsp_doc[MSG_COMMAND] = MSG_SET; 
+    const JsonObject &msg_obj = msg_handler_.get_message_obj();
+    for (auto kv : msg_obj) {
+        String key = String(kv.key().c_str());
+        if (set_func_table_.count(key)) {
+            set_func_table_[key]();
+        }
+    }
     msg_handler_.send_response();
 }
 
@@ -150,7 +173,7 @@ void PupaeThermalDevice::on_get_message() {
             get_func_table_[value]();
         }
         else {
-            rsp_doc[MSG_ERROR] = String("unknown value");
+            rsp_doc[MSG_ERROR] = String("set command unknown value");
         }
     }
     msg_handler_.send_response();
@@ -236,3 +259,34 @@ void PupaeThermalDevice::on_get_all() {
         }
     }
 }
+
+void PupaeThermalDevice::on_set_ctrl_pgain() {
+    const JsonDocument &msg_doc = msg_handler_.get_message_doc();
+    JsonDocument &rsp_doc = msg_handler_.get_response_doc();
+}
+
+
+void PupaeThermalDevice::on_set_ctrl_igain() {
+    const JsonDocument &msg_doc = msg_handler_.get_message_doc();
+    JsonDocument &rsp_doc = msg_handler_.get_response_doc();
+}
+
+
+void PupaeThermalDevice::on_set_ctrl_setpoint() {
+    const JsonDocument &msg_doc = msg_handler_.get_message_doc();
+    JsonDocument &rsp_doc = msg_handler_.get_response_doc();
+}
+
+
+void PupaeThermalDevice::on_set_ctrl_enabled() {
+    const JsonDocument &msg_doc = msg_handler_.get_message_doc();
+    JsonDocument &rsp_doc = msg_handler_.get_response_doc();
+    if (msg_doc[MSG_CTRL_ENABLED].is<bool>()) {
+        set_enabled(msg_doc[MSG_CTRL_ENABLED]);
+    }
+    else {
+        rsp_doc[MSG_ERROR] = String("value, "+ MSG_CTRL_ENABLED + ",  must be bool");
+    }
+}
+
+

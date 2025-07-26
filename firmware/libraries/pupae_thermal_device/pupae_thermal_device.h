@@ -21,6 +21,9 @@ class PupaeThermalDevice {
         PupaeThermalDevice();
         void initialize();
         void update();
+        bool enabled();
+        void set_enabled(bool enabled);
+
 
     protected:
 
@@ -50,6 +53,7 @@ class PupaeThermalDevice {
         void handle_message();
         void on_get_message();
         void on_set_message();
+
         void on_get_temperature();
         void on_get_ctrl_power();
         void on_get_ctrl_error();
@@ -59,6 +63,12 @@ class PupaeThermalDevice {
         void on_get_ctrl_setpoint();
         void on_get_ctrl_enabled();
         void on_get_all();
+
+        void on_set_ctrl_pgain();
+        void on_set_ctrl_igain();
+        void on_set_ctrl_setpoint();
+        void on_set_ctrl_enabled();
+
 };
 
 #endif
