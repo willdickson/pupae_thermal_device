@@ -20,3 +20,5 @@ firmware/libraries/SparkFun_Temperature_Sensor_-_STTS22H
 firmware/libraries/Switch
 firmware/libraries/CircularBuffer
 firmware/libraries/ArduinoJson
+software/pupae_thermal_device/example/*.txt
+software/pupae_thermal_device/example/*.pkl

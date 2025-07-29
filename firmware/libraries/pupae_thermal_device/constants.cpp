@@ -45,6 +45,7 @@ const String MSG_CTRL_ERROR = String("ctrl_error");
 const String MSG_CTRL_IERROR = String("ctrl_ierror");
 const String MSG_CTRL_PGAIN = String("ctrl_pgain");
 const String MSG_CTRL_IGAIN = String("ctrl_igain");
+const String MSG_CTRL_OFFSET = String("ctrl_offset");
 const String MSG_CTRL_SETPOINT = String("ctrl_setpoint");
 const String MSG_CTRL_ENABLED = String("ctrl_enabled");
 const String MSG_ALL = String("all");

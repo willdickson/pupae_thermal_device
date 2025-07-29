@@ -26,7 +26,7 @@ void TemperatureController::update() {
         error_ = setpoint_ - temperature_;
         ierror_ = ierror_ + error_;
         ierror_ = constrain(ierror_, -1.0*DRIVE_MAX_POWER/igain_, 1.0*DRIVE_MAX_POWER/igain_);
-        power_ = pgain_*error_ + igain_*ierror_;
+        power_ = pgain_*error_ + igain_*ierror_ + offset_;
         peltier_drive_.set_power(power_);
     }
     else {
@@ -102,4 +102,15 @@ float TemperatureController::igain() {
 void TemperatureController::set_igain(float value) {
     igain_ = fabs(value);
 }
+
+
+float TemperatureController::offset() {
+    return offset_;
+}
+
+
+void TemperatureController::set_offset(float value) {
+    offset_ = value;
+}
+
 

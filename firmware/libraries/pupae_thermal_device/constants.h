@@ -48,6 +48,7 @@ extern const String MSG_CTRL_ERROR;
 extern const String MSG_CTRL_IERROR;
 extern const String MSG_CTRL_PGAIN;
 extern const String MSG_CTRL_IGAIN;
+extern const String MSG_CTRL_OFFSET;
 extern const String MSG_CTRL_SETPOINT;
 extern const String MSG_CTRL_ENABLED;
 extern const String MSG_ALL;

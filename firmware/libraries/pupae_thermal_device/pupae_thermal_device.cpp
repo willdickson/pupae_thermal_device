@@ -28,6 +28,7 @@ void PupaeThermalDevice::initialize() {
     get_func_table_[MSG_CTRL_IERROR]   = [this]() {this -> on_get_ctrl_ierror();};
     get_func_table_[MSG_CTRL_PGAIN]    = [this]() {this -> on_get_ctrl_pgain();};
     get_func_table_[MSG_CTRL_IGAIN]    = [this]() {this -> on_get_ctrl_igain();};
+    get_func_table_[MSG_CTRL_OFFSET]   = [this]() {this -> on_get_ctrl_offset();};
     get_func_table_[MSG_CTRL_SETPOINT] = [this]() {this -> on_get_ctrl_setpoint();};
     get_func_table_[MSG_CTRL_ENABLED]  = [this]() {this -> on_get_ctrl_enabled();};
     get_func_table_[MSG_ALL]           = [this]() {this -> on_get_all();};
@@ -35,6 +36,7 @@ void PupaeThermalDevice::initialize() {
     // Populate set function table for message handling
     set_func_table_[MSG_CTRL_PGAIN]    = [this]() {this -> on_set_ctrl_pgain();};
     set_func_table_[MSG_CTRL_IGAIN]    = [this]() {this -> on_set_ctrl_igain();};
+    set_func_table_[MSG_CTRL_OFFSET]   = [this]() {this -> on_set_ctrl_offset();};
     set_func_table_[MSG_CTRL_SETPOINT] = [this]() {this -> on_set_ctrl_setpoint();};
     set_func_table_[MSG_CTRL_ENABLED]  = [this]() {this -> on_set_ctrl_enabled();};
 
@@ -233,6 +235,15 @@ void PupaeThermalDevice::on_get_ctrl_igain() {
 }
 
 
+void PupaeThermalDevice::on_get_ctrl_offset() {
+    JsonDocument &rsp_doc = msg_handler_.get_response_doc();
+    JsonArray offset_values = rsp_doc[MSG_CTRL_OFFSET].to<JsonArray>();
+    for (uint8_t i=0; i<NUM_CONTROLLER; i++) {
+        offset_values.add(temperature_controller_[i].offset());
+    }
+}
+
+
 void PupaeThermalDevice::on_get_ctrl_setpoint() {
     JsonDocument &rsp_doc = msg_handler_.get_response_doc();
     JsonArray setpoint_values = rsp_doc[MSG_CTRL_SETPOINT].to<JsonArray>();
@@ -246,8 +257,6 @@ void PupaeThermalDevice::on_get_ctrl_enabled() {
     JsonDocument &rsp_doc = msg_handler_.get_response_doc();
     rsp_doc[MSG_CTRL_ENABLED] = enabled_;
 }
-
-
 
 void PupaeThermalDevice::on_get_all() {
     for (const auto & [key, func] : get_func_table_) {
@@ -263,18 +272,113 @@ void PupaeThermalDevice::on_get_all() {
 void PupaeThermalDevice::on_set_ctrl_pgain() {
     const JsonDocument &msg_doc = msg_handler_.get_message_doc();
     JsonDocument &rsp_doc = msg_handler_.get_response_doc();
+    bool ok = true;
+    float pgain[NUM_CONTROLLER] = {0};
+    for (uint8_t i=0; i<NUM_CONTROLLER; i++) {
+        ok &= msg_doc[MSG_CTRL_PGAIN][i].is<float>();
+        pgain[i] = msg_doc[MSG_CTRL_PGAIN][i];
+        if (pgain[i] < 0) {
+            ok = false;
+            break;
+        }
+    }
+    if (ok) {
+        JsonArray pgain_json_rsp = rsp_doc[MSG_CTRL_PGAIN].to<JsonArray>();
+        for (uint8_t i=0; i<NUM_CONTROLLER; i++) {
+            float pgain = msg_doc[MSG_CTRL_PGAIN][i];
+            temperature_controller_[i].set_pgain(pgain);
+            pgain_json_rsp.add(pgain);
+        }
+    }
+    else {
+        String error_msg = String( "value, " + MSG_CTRL_PGAIN + ", ");
+        error_msg += "must be float array with >=0 values";
+        rsp_doc[MSG_ERROR] = error_msg;
+    }
+
 }
 
 
 void PupaeThermalDevice::on_set_ctrl_igain() {
     const JsonDocument &msg_doc = msg_handler_.get_message_doc();
     JsonDocument &rsp_doc = msg_handler_.get_response_doc();
+    bool ok = true;
+    float igain[NUM_CONTROLLER] = {0};
+    for (uint8_t i=0; i<NUM_CONTROLLER; i++) {
+        ok &= msg_doc[MSG_CTRL_IGAIN][i].is<float>();
+        igain[i] = msg_doc[MSG_CTRL_IGAIN][i];
+        if (igain[i] < 0) {
+            ok = false;
+            break;
+        }
+    }
+    if (ok) {
+        JsonArray igain_json_rsp = rsp_doc[MSG_CTRL_IGAIN].to<JsonArray>();
+        for (uint8_t i=0; i<NUM_CONTROLLER; i++) {
+            float igain = msg_doc[MSG_CTRL_IGAIN][i];
+            temperature_controller_[i].set_igain(igain);
+            igain_json_rsp.add(igain);
+        }
+    }
+    else {
+        String error_msg = String( "value, " + MSG_CTRL_IGAIN + ", ");
+        error_msg += "must be float array with >=0 values";
+        rsp_doc[MSG_ERROR] = error_msg;
+    }
+}
+
+
+void PupaeThermalDevice::on_set_ctrl_offset() {
+    const JsonDocument &msg_doc = msg_handler_.get_message_doc();
+    JsonDocument &rsp_doc = msg_handler_.get_response_doc();
+    bool ok = true;
+    float offset[NUM_CONTROLLER] = {0}; 
+    for (uint8_t i=0; i<NUM_CONTROLLER; i++) {
+        ok &= msg_doc[MSG_CTRL_OFFSET][i].is<float>();
+        offset[i] = msg_doc[MSG_CTRL_OFFSET][i];
+    }
+    if (ok) {
+        JsonArray offset_json_rsp = rsp_doc[MSG_CTRL_OFFSET].to<JsonArray>();
+        for (uint8_t i=0; i<NUM_CONTROLLER; i++) {
+            float offset = msg_doc[MSG_CTRL_OFFSET][i];
+            temperature_controller_[i].set_offset(offset);
+            offset_json_rsp.add(offset);
+        }
+    }
+    else {
+        String error_msg = String( "value, " + MSG_CTRL_OFFSET + ", ");
+        error_msg += "must be float array";
+        rsp_doc[MSG_ERROR] = error_msg;
+    }
 }
 
 
 void PupaeThermalDevice::on_set_ctrl_setpoint() {
     const JsonDocument &msg_doc = msg_handler_.get_message_doc();
     JsonDocument &rsp_doc = msg_handler_.get_response_doc();
+    bool ok = true;
+    float setpoint[NUM_CONTROLLER] = {0}; 
+    for (uint8_t i=0; i<NUM_CONTROLLER; i++) {
+        ok &= msg_doc[MSG_CTRL_SETPOINT][i].is<float>();
+        setpoint[i] = msg_doc[MSG_CTRL_SETPOINT][i];
+        if (setpoint[i] < 0) {
+            ok = false;
+            break;
+        }
+    }
+    if (ok) {
+        JsonArray setpoint_json_rsp = rsp_doc[MSG_CTRL_SETPOINT].to<JsonArray>();
+        for (uint8_t i=0; i<NUM_CONTROLLER; i++) {
+            float setpoint = msg_doc[MSG_CTRL_SETPOINT][i];
+            temperature_controller_[i].set_setpoint(setpoint);
+            setpoint_json_rsp.add(setpoint);
+        }
+    }
+    else {
+        String error_msg = String( "value, " + MSG_CTRL_SETPOINT + ", ");
+        error_msg += "must be float array with >=0 values";
+        rsp_doc[MSG_ERROR] = error_msg;
+    }
 }
 
 
@@ -282,7 +386,9 @@ void PupaeThermalDevice::on_set_ctrl_enabled() {
     const JsonDocument &msg_doc = msg_handler_.get_message_doc();
     JsonDocument &rsp_doc = msg_handler_.get_response_doc();
     if (msg_doc[MSG_CTRL_ENABLED].is<bool>()) {
-        set_enabled(msg_doc[MSG_CTRL_ENABLED]);
+        bool enabled = msg_doc[MSG_CTRL_ENABLED];
+        set_enabled(enabled);
+        rsp_doc[MSG_CTRL_ENABLED] = enabled;
     }
     else {
         rsp_doc[MSG_ERROR] = String("value, "+ MSG_CTRL_ENABLED + ",  must be bool");

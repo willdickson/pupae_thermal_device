@@ -13,6 +13,7 @@ MSG_CTRL_ERROR = 'ctrl_error'
 MSG_CTRL_IERROR = 'ctrl_ierror'
 MSG_CTRL_PGAIN = 'ctrl_pgain'
 MSG_CTRL_IGAIN = 'ctrl_igain'
+MSG_CTRL_OFFSET = 'ctrl_offset'
 MSG_CTRL_SETPOINT = 'ctrl_setpoint'
 MSG_CTRL_ENABLED = 'ctrl_enabled'
 MSG_ALL = 'all'
@@ -55,6 +56,11 @@ class PupaeThermalDevice(Serial): # type: ignore
         rsp_dict = self.send_cmd(cmd_dict)
         return rsp_dict[MSG_CTRL_IGAIN]
 
+    def get_ctrl_offset(self) -> dict:
+        cmd_dict = {MSG_COMMAND: MSG_GET, MSG_VALUE: MSG_CTRL_OFFSET} 
+        rsp_dict = self.send_cmd(cmd_dict)
+        return rsp_dict[MSG_CTRL_OFFSET]
+
     def get_ctrl_setpoint(self) -> dict:
         cmd_dict = {MSG_COMMAND: MSG_GET, MSG_VALUE: MSG_CTRL_SETPOINT} 
         rsp_dict = self.send_cmd(cmd_dict)
@@ -74,6 +80,27 @@ class PupaeThermalDevice(Serial): # type: ignore
     def set_ctrl_enabled(self, enabled: bool):
         cmd_dict = {MSG_COMMAND: MSG_SET, MSG_CTRL_ENABLED: enabled}
         rsp_dict = self.send_cmd(cmd_dict)
+        return rsp_dict[MSG_CTRL_ENABLED]
+
+    def set_ctrl_pgain(self, pgain: list[float]):
+        cmd_dict = {MSG_COMMAND: MSG_SET, MSG_CTRL_PGAIN: pgain}
+        rsp_dict = self.send_cmd(cmd_dict)
+        return rsp_dict[MSG_CTRL_PGAIN]
+
+    def set_ctrl_igain(self, igain: list[float]):
+        cmd_dict = {MSG_COMMAND: MSG_SET, MSG_CTRL_IGAIN: igain}
+        rsp_dict = self.send_cmd(cmd_dict)
+        return rsp_dict[MSG_CTRL_IGAIN]
+
+    def set_ctrl_offset(self, offset: list[float]):
+        cmd_dict = {MSG_COMMAND: MSG_SET, MSG_CTRL_OFFSET: offset}
+        rsp_dict = self.send_cmd(cmd_dict)
+        return rsp_dict[MSG_CTRL_OFFSET]
+
+    def set_ctrl_setpoint(self, setpoint: list[float]):
+        cmd_dict = {MSG_COMMAND: MSG_SET, MSG_CTRL_SETPOINT: setpoint}
+        rsp_dict = self.send_cmd(cmd_dict)
+        return rsp_dict[MSG_CTRL_SETPOINT]
 
     def send_cmd(self, cmd_dict: dict) -> dict:
         cmd_json = f'{json.dumps(cmd_dict)}\n'
