@@ -34,7 +34,7 @@ for i in range(2):
     ax[0].legend(loc='upper right')
     
     ax[1].plot(t[1:], pgain*error[1:,i],'b', label='error')
-    ax[1].plot(t[1:], igain*ierror[1:,i],'g', label='ierro')
+    ax[1].plot(t[1:], igain*ierror[1:,i],'g', label='ierror')
     ax[1].plot(t[1:], power[1:,i], 'r', label='power')
     ax[1].set_ylabel('power')
     ax[1].set_xlabel('t (sec)')

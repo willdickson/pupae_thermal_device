@@ -6,8 +6,8 @@ from pupae_thermal_device import PupaeThermalDevice
 port = '/dev/ttyACM0'
 duration = 3*60 
 dt = 0.25
-pgain = 40
-igain = 0.02
+pgain = 10 
+igain = 0.01
 setpoint = [18, 32]
 filename = f'closedloop_data_p{int(pgain):03d}_i{int(1000*igain):03d}.pkl'
 
