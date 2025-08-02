@@ -70,6 +70,8 @@ void TemperatureController::set_enabled(bool value) {
     if (!enabled_) {
         peltier_drive_.set_power(0.0);
         ierror_ = 0.0;
+        error_ = 0.0;
+        power_ = 0.0;
     }
 }
 

@@ -9,6 +9,9 @@ class ControllerParametersWidget(QtWidgets.QWidget, Ui_ControllerParametersWidge
     TEXT_ENABLED = 'Enabled'
     TEXT_DISABLED = 'Disabled'
 
+    sig_setpoint_left_changed = QtCore.Signal(float)
+    sig_setpoint_right_changed = QtCore.Signal(float)
+
     def __init__(self, parent=None):
         super().__init__(parent=parent)
         self.setupUi(self)
@@ -108,7 +111,8 @@ class ControllerParametersWidget(QtWidgets.QWidget, Ui_ControllerParametersWidge
 
     @setpoint_left.setter
     def setpoint_left(self, value):
-        self.setpoint_left_dblspinbox.setValue(value)
+        if not self.setpoint_left_dblspinbox.hasFocus():
+            self.setpoint_left_dblspinbox.setValue(value)
 
     @property
     def setpoint_right(self):
@@ -116,7 +120,16 @@ class ControllerParametersWidget(QtWidgets.QWidget, Ui_ControllerParametersWidge
 
     @setpoint_right.setter
     def setpoint_right(self, value):
-        self.setpoint_right_dblspinbox.setValue(value)
+        if not self.setpoint_right_dblspinbox.hasFocus():
+            self.setpoint_right_dblspinbox.setValue(value)
+
+    @property
+    def setpoint(self):
+        return self.setpoint_right, self.setpoint_left
+
+    @setpoint.setter
+    def setpoint(self, value):
+        self.setpoint_right, self.setpoint_left = value
 
     def set_device_pgains(self):
         if self.device is not None:
@@ -166,9 +179,11 @@ class ControllerParametersWidget(QtWidgets.QWidget, Ui_ControllerParametersWidge
 
     def on_setpoint_left_value_changed(self, new_value):
         self.set_device_setpoints()
+        self.sig_setpoint_left_changed.emit(new_value)
 
     def on_setpoint_right_value_changed(self, new_value):
         self.set_device_setpoints()
+        self.sig_setpoint_right_changed.emit(new_value)
 
     def on_enable_disable_pushbutton_clicked(self):
         enabled = not self.device.get_ctrl_enabled()
