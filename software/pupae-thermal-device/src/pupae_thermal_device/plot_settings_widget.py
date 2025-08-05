@@ -30,5 +30,5 @@ class PlotSettingsWidget(QtWidgets.QWidget, Ui_PlotSettingsWidget):
         self.sig_plot_window_changed.emit(new_value)
 
     def on_plot_reset_pushbutton_clicked(self):
-        self.sig_plot_window_reset()
+        self.sig_plot_window_reset.emit()
 

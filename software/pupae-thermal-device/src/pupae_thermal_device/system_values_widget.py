@@ -9,10 +9,20 @@ class SystemValuesWidget(QtWidgets.QWidget, Ui_SystemValuesWidget):
         self.setupUi(self)
 
     def set_values(self, values):
-        self.set_temperature(values['temperature'])
-        self.set_error(values['ctrl_error'])
-        self.set_ierror(values['ctrl_ierror'])
-        self.set_power(values['ctrl_power'])
+        temperature = values['temperature']
+        pgain = values['ctrl_pgain']
+        igain = values['ctrl_igain']
+        error = values['ctrl_error']
+        ierror = values['ctrl_ierror']
+        power = values['ctrl_power']
+
+        #error = [x*y for x,y in zip(pgain,error)]
+        #ierror = [x*y for x,y in zip(igain,ierror)]
+
+        self.set_temperature(temperature)
+        self.set_error(error)
+        self.set_ierror(ierror)
+        self.set_power(power)
 
     def set_temperature(self, temperature):
         temperature_right, temperature_left = temperature
