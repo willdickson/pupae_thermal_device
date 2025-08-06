@@ -10,19 +10,22 @@ class SystemValuesWidget(QtWidgets.QWidget, Ui_SystemValuesWidget):
 
     def set_values(self, values):
         temperature = values['temperature']
-        pgain = values['ctrl_pgain']
-        igain = values['ctrl_igain']
         error = values['ctrl_error']
-        ierror = values['ctrl_ierror']
         power = values['ctrl_power']
+        ierror = values['ctrl_ierror']
+        derror = values['ctrl_derror']
 
+        #pgain = values['ctrl_pgain']
+        #igain = values['ctrl_igain']
+        #dgain = values['ctrl_dgain']
         #error = [x*y for x,y in zip(pgain,error)]
         #ierror = [x*y for x,y in zip(igain,ierror)]
 
         self.set_temperature(temperature)
         self.set_error(error)
-        self.set_ierror(ierror)
         self.set_power(power)
+        self.set_ierror(ierror)
+        self.set_derror(derror)
 
     def set_temperature(self, temperature):
         temperature_right, temperature_left = temperature
@@ -38,6 +41,11 @@ class SystemValuesWidget(QtWidgets.QWidget, Ui_SystemValuesWidget):
         ierror_right, ierror_left = ierror
         self.set_ierror_right(ierror_right)
         self.set_ierror_left(ierror_left)
+
+    def set_derror(self, derror):
+        derror_right, derror_left = derror
+        self.set_derror_right(derror_right)
+        self.set_derror_left(derror_left)
 
     def set_power(self, power):
         power_right, power_left = power
@@ -61,6 +69,12 @@ class SystemValuesWidget(QtWidgets.QWidget, Ui_SystemValuesWidget):
 
     def set_ierror_left(self, value):
         self.ierror_left_value_label.setText(f'{value:.1f}')
+
+    def set_derror_right(self, value):
+        self.derror_right_value_label.setText(f'{value:.1f}')
+
+    def set_derror_left(self, value):
+        self.derror_left_value_label.setText(f'{value:.1f}')
 
     def set_power_right(self, value):
         self.power_right_value_label.setText(f'{value:.1f}')

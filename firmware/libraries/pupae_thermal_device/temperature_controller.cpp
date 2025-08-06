@@ -15,23 +15,35 @@ void TemperatureController::initialize(uint8_t sensor_address, Adafruit_DCMotor 
     sensor_.setDataRate(STTS22H_25Hz);
     sensor_.enableAutoIncrement();
     delay(SENSOR_SETUP_DT);
-
     peltier_drive_.initialize(motor);
+    t_last_us_ = micros();
 }
 
 
 void TemperatureController::update() {
+    unsigned long t_now_us = micros();
+    float dt_s = 1.0e-6*(t_now_us - t_last_us_);
     sensor_.getTemperatureC(&temperature_);
+    
     if (enabled_) {
-        error_ = setpoint_ - temperature_;
-        ierror_ = ierror_ + error_;
+        error_  = setpoint_ - temperature_;
+
+        ierror_ = ierror_ + dt_s*error_;
         ierror_ = constrain(ierror_, -1.0*DRIVE_MAX_POWER/igain_, 1.0*DRIVE_MAX_POWER/igain_);
-        power_ = pgain_*error_ + igain_*ierror_ + offset_;
+
+        derror_lowpass_.update((error_ - error_last_)/dt_s, dt_s);
+        derror_ = derror_lowpass_.get_val();
+        error_last_ = error_;
+
+        power_  = pgain_*error_ + igain_*ierror_ + dgain_*derror_ + offset_;
+        power_ = constrain(power_, -1.0*DRIVE_MAX_POWER, 1.0*DRIVE_MAX_POWER);
+
         peltier_drive_.set_power(power_);
     }
     else {
         peltier_drive_.set_power(0.0);
     }
+    t_last_us_ = t_now_us;
 }
 
 
@@ -55,6 +67,11 @@ float TemperatureController::ierror() {
 }
 
 
+float TemperatureController::derror() {
+    return derror_;
+}
+
+
 uint8_t TemperatureController::sensor_address() {
     return sensor_address_;
 }
@@ -69,9 +86,12 @@ void TemperatureController::set_enabled(bool value) {
     enabled_ = value;
     if (!enabled_) {
         peltier_drive_.set_power(0.0);
-        ierror_ = 0.0;
-        error_ = 0.0;
         power_ = 0.0;
+        error_ = 0.0;
+        ierror_ = 0.0;
+        derror_ = 0.0;
+        error_last_ = 0.0;
+        derror_lowpass_.reset();
     }
 }
 
@@ -103,6 +123,16 @@ float TemperatureController::igain() {
 
 void TemperatureController::set_igain(float value) {
     igain_ = fabs(value);
+}
+
+
+float TemperatureController::dgain() {
+    return dgain_;
+}
+
+
+void TemperatureController::set_dgain(float value) {
+    dgain_ = fabs(value);
 }
 
 

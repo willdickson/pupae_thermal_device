@@ -26,9 +26,10 @@ const uint32_t BUTTON_DEGLITCH_PERIOD = 10;
 const float SETP_STEP_ON_BUTTON_PRESS = 0.1;
 extern const unsigned long BUTTON_MIN_STEP_DT_MS = 100;
 
-const float DEFAULT_PGAIN = 100.0;
-const float DEFAULT_IGAIN = 0.005;
-
+const float DEFAULT_PGAIN = 300.0;
+const float DEFAULT_IGAIN = 0.200;
+const float DEFAULT_DGAIN = 1000.0;
+const float DGAIN_LOWPASS_CUTOFF_FREQ = 0.10;
 const float DEFAULT_SETP[NUM_CONTROLLER] = {18.0, 32.0};
 
 const float MIN_SETP_TEMP_C = 16.0;
@@ -43,8 +44,10 @@ const String MSG_TEMPERATURE = String("temperature");
 const String MSG_CTRL_POWER = String("ctrl_power");
 const String MSG_CTRL_ERROR = String("ctrl_error");
 const String MSG_CTRL_IERROR = String("ctrl_ierror");
+const String MSG_CTRL_DERROR = String("ctrl_derror");
 const String MSG_CTRL_PGAIN = String("ctrl_pgain");
 const String MSG_CTRL_IGAIN = String("ctrl_igain");
+const String MSG_CTRL_DGAIN = String("ctrl_dgain");;
 const String MSG_CTRL_OFFSET = String("ctrl_offset");
 const String MSG_CTRL_SETPOINT = String("ctrl_setpoint");
 const String MSG_CTRL_ENABLED = String("ctrl_enabled");

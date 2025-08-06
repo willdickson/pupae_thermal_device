@@ -40,6 +40,16 @@ class MplCanvas(FigureCanvas):
         line_temp_1, = self.ax_temp[1].plot([0],[0],'b')
         self.line_temp = line_temp_0, line_temp_1
 
+        # Create derror line
+        line_derror_0, = self.ax_power[0].plot([0],[0],'c')
+        line_derror_1, = self.ax_power[1].plot([0],[0],'c')
+        self.line_derror = line_derror_0, line_derror_1
+
+        # Create power line
+        line_power_0, = self.ax_power[0].plot([0],[0],'r')
+        line_power_1, = self.ax_power[1].plot([0],[0],'r')
+        self.line_power = line_power_0, line_power_1
+
         # Create error line
         line_error_0, = self.ax_power[0].plot([0],[0],'b')
         line_error_1, = self.ax_power[1].plot([0],[0],'b')
@@ -50,10 +60,6 @@ class MplCanvas(FigureCanvas):
         line_ierror_1, = self.ax_power[1].plot([0],[0],'g')
         self.line_ierror = line_ierror_0, line_ierror_1
 
-        # Create power line
-        line_power_0, = self.ax_power[0].plot([0],[0],'r')
-        line_power_1, = self.ax_power[1].plot([0],[0],'r')
-        self.line_power = line_power_0, line_power_1
 
         # Set temperature plot legends
         self.ax_temp[0].legend(
@@ -69,13 +75,13 @@ class MplCanvas(FigureCanvas):
 
         # Set power plot legends
         self.ax_power[0].legend(
-                (line_error_0, line_ierror_0, line_power_0), 
-                ('error', 'ierror', 'power'), 
+                (line_error_0, line_ierror_0, line_derror_0, line_power_0), 
+                ('error', 'ierror', 'derror', 'power'), 
                 loc='upper right', 
                 )
         self.ax_power[1].legend(
-                (line_error_1, line_ierror_1, line_power_1), 
-                ('error', 'ierror', 'power'), 
+                (line_error_1, line_ierror_1, line_derror_1, line_power_1), 
+                ('error', 'ierror', 'derror', 'power'), 
                 loc='upper right', 
                 )
 
@@ -118,6 +124,7 @@ class MplCanvas(FigureCanvas):
         self.update_temperature_lines(t, plot_data['temperature'])
         self.update_error_lines(t, plot_data['error'])
         self.update_ierror_lines(t, plot_data['ierror'])
+        self.update_derror_lines(t, plot_data['derror'])
         self.update_power_lines(t, plot_data['power'])
 
     def update_setpoint_lines(self, t, setpoint_data):
@@ -135,6 +142,10 @@ class MplCanvas(FigureCanvas):
     def update_ierror_lines(self, t, ierror_data):
         self.line_ierror[0].set_data(t, ierror_data['left'])
         self.line_ierror[1].set_data(t, ierror_data['right'])
+
+    def update_derror_lines(self, t, derror_data):
+        self.line_derror[0].set_data(t, derror_data['left'])
+        self.line_derror[1].set_data(t, derror_data['right'])
 
     def update_power_lines(self, t, power_data):
         self.line_power[0].set_data(t, power_data['left'])

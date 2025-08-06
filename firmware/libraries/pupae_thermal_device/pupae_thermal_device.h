@@ -58,8 +58,10 @@ class PupaeThermalDevice {
         void on_get_ctrl_power();
         void on_get_ctrl_error();
         void on_get_ctrl_ierror();
+        void on_get_ctrl_derror();
         void on_get_ctrl_pgain();
         void on_get_ctrl_igain();
+        void on_get_ctrl_dgain();
         void on_get_ctrl_offset();
         void on_get_ctrl_setpoint();
         void on_get_ctrl_enabled();
@@ -67,6 +69,7 @@ class PupaeThermalDevice {
 
         void on_set_ctrl_pgain();
         void on_set_ctrl_igain();
+        void on_set_ctrl_dgain();
         void on_set_ctrl_setpoint();
         void on_set_ctrl_offset();
         void on_set_ctrl_enabled();

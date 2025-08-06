@@ -32,6 +32,8 @@ extern const unsigned long BUTTON_MIN_STEP_DT_MS;
 
 extern const float DEFAULT_PGAIN;
 extern const float DEFAULT_IGAIN;
+extern const float DEFAULT_DGAIN;
+extern const float DGAIN_LOWPASS_CUTOFF_FREQ;
 extern const float DEFAULT_SETP[NUM_CONTROLLER];
 
 extern const float MIN_SETP_TEMP_C;
@@ -46,8 +48,10 @@ extern const String MSG_TEMPERATURE;
 extern const String MSG_CTRL_POWER;
 extern const String MSG_CTRL_ERROR;
 extern const String MSG_CTRL_IERROR;
+extern const String MSG_CTRL_DERROR;
 extern const String MSG_CTRL_PGAIN;
 extern const String MSG_CTRL_IGAIN;
+extern const String MSG_CTRL_DGAIN;
 extern const String MSG_CTRL_OFFSET;
 extern const String MSG_CTRL_SETPOINT;
 extern const String MSG_CTRL_ENABLED;

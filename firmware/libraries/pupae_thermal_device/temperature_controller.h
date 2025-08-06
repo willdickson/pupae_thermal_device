@@ -4,6 +4,7 @@
 #include "Adafruit_MotorShield.h"
 #include "SparkFun_STTS22H.h"
 #include "peltier_drive.h"
+#include "lowpass_filter.h"
 
 
 
@@ -19,6 +20,7 @@ class TemperatureController {
         float power();
         float error();
         float ierror();
+        float derror();
 
         uint8_t sensor_address();
 
@@ -34,6 +36,9 @@ class TemperatureController {
         float igain();
         void set_igain(float value);
 
+        float dgain();
+        void set_dgain(float value);
+
         float offset();
         void set_offset(float value);
 
@@ -43,17 +48,28 @@ class TemperatureController {
 
     protected:
         SparkFun_STTS22H sensor_;
-        PeltierDrive peltier_drive_ = PeltierDrive();
-        bool enabled_ = false;
         uint8_t sensor_address_ = 0;
+
+        PeltierDrive peltier_drive_ = PeltierDrive();
+
+        bool enabled_ = false;
+        bool is_first_ = false;
+        unsigned long t_last_us_ = 0;
+
         float temperature_ = 0.0;
         float setpoint_ = DEFAULT_SETPOINT;
-        float ierror_ = 0.0;
-        float error_ = 0.0;
+
         float pgain_ = DEFAULT_PGAIN;
         float igain_ = DEFAULT_IGAIN;
-        float power_ = 0.0;
+        float dgain_ = DEFAULT_DGAIN;
         float offset_ = 0.0;
+
+        float power_ = 0.0;
+        float error_ = 0.0;
+        float ierror_ = 0.0;
+        float derror_ = 0.0;
+        float error_last_ = 0.0;
+        LowpassFilter derror_lowpass_ = LowpassFilter(DGAIN_LOWPASS_CUTOFF_FREQ, 0.0);
 
 };
 

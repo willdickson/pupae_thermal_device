@@ -11,8 +11,10 @@ MSG_TEMPERATURE = 'temperature'
 MSG_CTRL_POWER = 'ctrl_power'
 MSG_CTRL_ERROR = 'ctrl_error'
 MSG_CTRL_IERROR = 'ctrl_ierror'
+MSG_CTRL_DERROR = 'ctrl_derror'
 MSG_CTRL_PGAIN = 'ctrl_pgain'
 MSG_CTRL_IGAIN = 'ctrl_igain'
+MSG_CTRL_DGAIN = 'ctrl_dgain'
 MSG_CTRL_OFFSET = 'ctrl_offset'
 MSG_CTRL_SETPOINT = 'ctrl_setpoint'
 MSG_CTRL_ENABLED = 'ctrl_enabled'
@@ -46,6 +48,11 @@ class PupaeThermalDevice(Serial): # type: ignore
         rsp_dict = self.send_cmd(cmd_dict)
         return rsp_dict[MSG_CTRL_IERROR]
 
+    def get_ctrl_derror(self) -> dict:
+        cmd_dict = {MSG_COMMAND: MSG_GET, MSG_VALUE: MSG_CTRL_DERROR} 
+        rsp_dict = self.send_cmd(cmd_dict)
+        return rsp_dict[MSG_CTRL_DERROR]
+
     def get_ctrl_pgain(self) -> dict:
         cmd_dict = {MSG_COMMAND: MSG_GET, MSG_VALUE: MSG_CTRL_PGAIN} 
         rsp_dict = self.send_cmd(cmd_dict)
@@ -55,6 +62,11 @@ class PupaeThermalDevice(Serial): # type: ignore
         cmd_dict = {MSG_COMMAND: MSG_GET, MSG_VALUE: MSG_CTRL_IGAIN} 
         rsp_dict = self.send_cmd(cmd_dict)
         return rsp_dict[MSG_CTRL_IGAIN]
+
+    def get_ctrl_dgain(self) -> dict:
+        cmd_dict = {MSG_COMMAND: MSG_GET, MSG_VALUE: MSG_CTRL_DGAIN} 
+        rsp_dict = self.send_cmd(cmd_dict)
+        return rsp_dict[MSG_CTRL_DGAIN]
 
     def get_ctrl_offset(self) -> dict:
         cmd_dict = {MSG_COMMAND: MSG_GET, MSG_VALUE: MSG_CTRL_OFFSET} 
@@ -91,6 +103,11 @@ class PupaeThermalDevice(Serial): # type: ignore
         cmd_dict = {MSG_COMMAND: MSG_SET, MSG_CTRL_IGAIN: igain}
         rsp_dict = self.send_cmd(cmd_dict)
         return rsp_dict[MSG_CTRL_IGAIN]
+
+    def set_ctrl_dgain(self, dgain: list[float]):
+        cmd_dict = {MSG_COMMAND: MSG_SET, MSG_CTRL_DGAIN: dgain}
+        rsp_dict = self.send_cmd(cmd_dict)
+        return rsp_dict[MSG_CTRL_DGAIN]
 
     def set_ctrl_offset(self, offset: list[float]):
         cmd_dict = {MSG_COMMAND: MSG_SET, MSG_CTRL_OFFSET: offset}

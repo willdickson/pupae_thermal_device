@@ -31,6 +31,8 @@ class ControllerParametersWidget(QtWidgets.QWidget, Ui_ControllerParametersWidge
         self.pgain_right_dblspinbox.valueChanged.connect(self.on_pgain_right_value_changed)
         self.igain_left_dblspinbox.valueChanged.connect(self.on_igain_left_value_changed)
         self.igain_right_dblspinbox.valueChanged.connect(self.on_igain_right_value_changed)
+        self.dgain_left_dblspinbox.valueChanged.connect(self.on_dgain_left_value_changed)
+        self.dgain_right_dblspinbox.valueChanged.connect(self.on_dgain_right_value_changed)
         self.offset_left_dblspinbox.valueChanged.connect(self.on_offset_left_value_changed)
         self.offset_right_dblspinbox.valueChanged.connect(self.on_offset_right_value_changed)
         self.setpoint_left_dblspinbox.valueChanged.connect(self.on_setpoint_left_value_changed)
@@ -49,6 +51,7 @@ class ControllerParametersWidget(QtWidgets.QWidget, Ui_ControllerParametersWidge
         values = self.device.get_all()
         self.pgain_right, self.pgain_left = values['ctrl_pgain']
         self.igain_right, self.igain_left = values['ctrl_igain']
+        self.dgain_right, self.dgain_left = values['ctrl_dgain']
         self.offset_right, self.offset_left = values['ctrl_offset']
         self.setpoint_right, self.setpoint_left = values['ctrl_setpoint']
         self.set_enable_disable_pushbutton_text(values['ctrl_enabled'])
@@ -88,6 +91,22 @@ class ControllerParametersWidget(QtWidgets.QWidget, Ui_ControllerParametersWidge
     @igain_right.setter
     def igain_right(self, value):
         self.igain_right_dblspinbox.setValue(value)
+
+    @property
+    def dgain_left(self):
+        return self.dgain_left_dblspinbox.value()
+
+    @dgain_left.setter
+    def dgain_left(self, value):
+        self.dgain_left_dblspinbox.setValue(value)
+
+    @property
+    def dgain_right(self):
+        return self.dgain_right_dblspinbox.value()
+
+    @dgain_right.setter
+    def dgain_right(self, value):
+        self.dgain_right_dblspinbox.setValue(value)
 
     @property
     def offset_left(self):
@@ -145,6 +164,13 @@ class ControllerParametersWidget(QtWidgets.QWidget, Ui_ControllerParametersWidge
             igain_values = [igain_right, igain_left]
             self.device.set_ctrl_igain(igain_values)
 
+    def set_device_dgains(self):
+        if self.device is not None:
+            dgain_left = self.dgain_left_dblspinbox.value()
+            dgain_right = self.dgain_right_dblspinbox.value()
+            dgain_values = [dgain_right, dgain_left]
+            self.device.set_ctrl_dgain(dgain_values)
+
     def set_device_offsets(self):
         if self.device is not None:
             offset_left = self.offset_left_dblspinbox.value()
@@ -170,6 +196,12 @@ class ControllerParametersWidget(QtWidgets.QWidget, Ui_ControllerParametersWidge
 
     def on_igain_right_value_changed(self, new_value):
         self.set_device_igains()
+
+    def on_dgain_left_value_changed(self, new_value):
+        self.set_device_dgains()
+
+    def on_dgain_right_value_changed(self, new_value):
+        self.set_device_dgains()
 
     def on_offset_left_value_changed(self, new_value):
         self.set_device_offsets()

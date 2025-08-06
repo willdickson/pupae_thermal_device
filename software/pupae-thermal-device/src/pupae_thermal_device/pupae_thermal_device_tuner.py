@@ -76,12 +76,14 @@ class TunerMainWindow(QtWidgets.QMainWindow, Ui_TunerMainWindow):
         t = t_now - self.t_start
         dt = t_now - self.t_last
         self.t_last = t_now
-        print(f't: {t:.2f}, dt: {dt:.3f}')
+        #print(f't: {t:.2f}, dt: {dt:.3f}')
 
         pgain_right = device_values['ctrl_pgain'][0]
         pgain_left = device_values['ctrl_pgain'][1]
         igain_right = device_values['ctrl_igain'][0]
         igain_left = device_values['ctrl_igain'][1]
+        dgain_right = device_values['ctrl_dgain'][0]
+        dgain_left = device_values['ctrl_dgain'][1]
         setpoint_right = device_values['ctrl_setpoint'][0]
         setpoint_left = device_values['ctrl_setpoint'][1]
         temperature_right = device_values['temperature'][0]
@@ -90,6 +92,8 @@ class TunerMainWindow(QtWidgets.QMainWindow, Ui_TunerMainWindow):
         error_left = device_values['ctrl_error'][1]
         ierror_right = device_values['ctrl_ierror'][0]
         ierror_left = device_values['ctrl_ierror'][1]
+        derror_right = device_values['ctrl_derror'][0]
+        derror_left = device_values['ctrl_derror'][1]
         power_right = device_values['ctrl_power'][0]
         power_left = device_values['ctrl_power'][1]
 
@@ -102,6 +106,8 @@ class TunerMainWindow(QtWidgets.QMainWindow, Ui_TunerMainWindow):
         self.plot_data['error']['left'].append(pgain_right*error_left)
         self.plot_data['ierror']['right'].append(igain_left*ierror_right)
         self.plot_data['ierror']['left'].append(igain_left*ierror_left)
+        self.plot_data['derror']['right'].append(dgain_right*derror_right)
+        self.plot_data['derror']['left'].append(dgain_left*derror_left)
         self.plot_data['power']['right'].append(power_right)
         self.plot_data['power']['left'].append(power_left)
 
@@ -175,6 +181,7 @@ def create_empty_plot_data():
             'setpoint'    : {'right' : [], 'left' : []},
             'error'       : {'right' : [], 'left' : []}, 
             'ierror'      : {'right' : [], 'left' : []},
+            'derror'      : {'right' : [], 'left' : []},
             'power'       : {'right' : [], 'left' : []}, 
             } 
     return plot_data
