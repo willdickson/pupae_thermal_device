@@ -16,11 +16,14 @@ and to toggle the controller's enabled/disabled state.
 Creative Commons Attribution 4.0 International CC BY 4.0
 
 
+
 ## Device Image 
+
 ![screenshot](images/pupae_thermal_device.jpg)
 
 
 ## OLED display and control buttons
+
 ![screenshot](images/buttons_figure.png)
 
 The set-point temperatures for plates and the temperature controller's
@@ -49,7 +52,8 @@ Adafruit OLED Featherwing.
 A simple GUI tool is also available "pupae_thermal_device_tuner" for tuning the
 PID controller gains. The tool live streams the systems values - temperature,
 setpoint, error, ierror, derror, power - and enables the user to adjust the
-controllers set-points and controller gains.  
+set-points and gains of the controllers.  
+
 ![screenshot](images/tuner_gui_5.png)
 
 
