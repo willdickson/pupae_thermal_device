@@ -92,11 +92,6 @@ class Ui_SystemValuesWidget(object):
 
         self.gridLayout_2.addWidget(self.system_values_right_label, 0, 2, 1, 1)
 
-        self.temperature_units_label = QLabel(SystemValuesWidget)
-        self.temperature_units_label.setObjectName(u"temperature_units_label")
-
-        self.gridLayout_2.addWidget(self.temperature_units_label, 1, 3, 1, 1)
-
         self.power_right_value_label = QLabel(SystemValuesWidget)
         self.power_right_value_label.setObjectName(u"power_right_value_label")
         self.power_right_value_label.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
@@ -144,6 +139,29 @@ class Ui_SystemValuesWidget(object):
 
         self.gridLayout_2.addWidget(self.derror_right_value_label, 4, 2, 1, 1)
 
+        self.error_units_label = QLabel(SystemValuesWidget)
+        self.error_units_label.setObjectName(u"error_units_label")
+        self.error_units_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
+
+        self.gridLayout_2.addWidget(self.error_units_label, 2, 3, 1, 1)
+
+        self.ierror_units_label = QLabel(SystemValuesWidget)
+        self.ierror_units_label.setObjectName(u"ierror_units_label")
+        self.ierror_units_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
+
+        self.gridLayout_2.addWidget(self.ierror_units_label, 3, 3, 1, 1)
+
+        self.derror_units_label = QLabel(SystemValuesWidget)
+        self.derror_units_label.setObjectName(u"derror_units_label")
+        self.derror_units_label.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
+
+        self.gridLayout_2.addWidget(self.derror_units_label, 4, 3, 1, 1)
+
+        self.temperature_units_label = QLabel(SystemValuesWidget)
+        self.temperature_units_label.setObjectName(u"temperature_units_label")
+
+        self.gridLayout_2.addWidget(self.temperature_units_label, 1, 3, 1, 1)
+
 
         self.horizontalLayout.addLayout(self.gridLayout_2)
 
@@ -170,7 +188,6 @@ class Ui_SystemValuesWidget(object):
         self.temperature_name_label.setText(QCoreApplication.translate("SystemValuesWidget", u"Temperature", None))
         self.label_20.setText("")
         self.system_values_right_label.setText(QCoreApplication.translate("SystemValuesWidget", u"Right", None))
-        self.temperature_units_label.setText(QCoreApplication.translate("SystemValuesWidget", u"        C", None))
         self.power_right_value_label.setText(QCoreApplication.translate("SystemValuesWidget", u"0.0", None))
         self.system_values_left_label.setText(QCoreApplication.translate("SystemValuesWidget", u"Left", None))
         self.error_left_value_label.setText(QCoreApplication.translate("SystemValuesWidget", u"0.0", None))
@@ -179,5 +196,9 @@ class Ui_SystemValuesWidget(object):
         self.derror_name_label.setText(QCoreApplication.translate("SystemValuesWidget", u"DError", None))
         self.derror_left_value_label.setText(QCoreApplication.translate("SystemValuesWidget", u"0.0", None))
         self.derror_right_value_label.setText(QCoreApplication.translate("SystemValuesWidget", u"0.0", None))
+        self.error_units_label.setText(QCoreApplication.translate("SystemValuesWidget", u"C", None))
+        self.ierror_units_label.setText(QCoreApplication.translate("SystemValuesWidget", u"C s", None))
+        self.derror_units_label.setText(QCoreApplication.translate("SystemValuesWidget", u"C / s", None))
+        self.temperature_units_label.setText(QCoreApplication.translate("SystemValuesWidget", u"C", None))
     # retranslateUi
 
