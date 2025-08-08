@@ -26,8 +26,8 @@ Creative Commons Attribution 4.0 International CC BY 4.0
 
 ![screenshot](images/buttons_figure.png)
 
-The set-point temperatures for plates and the temperature controller's
-enabled/disabled state can be controlled using the A, B and C buttons on the
+The set-point temperatures for the plates and the temperature controller's
+state (enabled/disabled) can be controlled using the A, B and C buttons on the
 Adafruit OLED Featherwing.
 
 * A/B buttons control right/left plate set-points.  The A/B buttons are
